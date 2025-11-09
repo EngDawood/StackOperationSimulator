@@ -41,13 +41,28 @@ public class App extends Application {
     private Button popButton;
     private Button peekButton;
 
-    // Stack capacity
-    private static final int STACK_CAPACITY = 12;
+    // Stack capacity (configurable)
+    private int stackCapacity = 12;
+
+    // Initial data for stack (optional)
+    private int[] initialData = null;
 
     @Override
     public void start(Stage stage) {
         // Initialize stack
-        stack = new StackDemo(STACK_CAPACITY);
+        stack = new StackDemo(stackCapacity);
+
+        // Push initial data if provided
+        if (initialData != null) {
+            for (int value : initialData) {
+                try {
+                    stack.push(value);
+                } catch (IllegalStateException e) {
+                    // Stop if stack becomes full
+                    break;
+                }
+            }
+        }
 
         // Stage configuration
         stage.setTitle("Stack Operation Simulator");
@@ -291,7 +306,7 @@ public class App extends Application {
      * Reinitializes stack and updates display.
      */
     private void handleClear() {
-        stack = new StackDemo(STACK_CAPACITY);
+        stack = new StackDemo(stackCapacity);
         setStatusText("Stack cleared", "orange");
         updateStackDisplay();
         updateButtonStates();
@@ -307,7 +322,7 @@ public class App extends Application {
         stackVisualization.getChildren().clear();
 
         // Add capacity indicator
-        Label capacityLabel = new Label("Capacity: " + STACK_CAPACITY);
+        Label capacityLabel = new Label("Capacity: " + stackCapacity);
         capacityLabel.getStyleClass().add("capacity-label");
         stackVisualization.getChildren().add(capacityLabel);
 
@@ -348,7 +363,7 @@ public class App extends Application {
         }
 
         // Add empty slots visualization
-        int emptySlots = STACK_CAPACITY - currentSize;
+        int emptySlots = stackCapacity - currentSize;
         for (int i = 0; i < emptySlots; i++) {
             HBox emptyBox = new HBox();
             emptyBox.setAlignment(Pos.CENTER);
@@ -422,6 +437,26 @@ public class App extends Application {
                 statusLabel.getStyleClass().add("status-warning");
                 break;
         }
+    }
+
+    /**
+     * Sets the stack capacity.
+     * Must be called before start() method.
+     *
+     * @param capacity the maximum number of elements the stack can hold
+     */
+    public void setStackCapacity(int capacity) {
+        this.stackCapacity = capacity;
+    }
+
+    /**
+     * Sets the initial data to be pushed to the stack.
+     * Must be called before start() method.
+     *
+     * @param data array of integers to push to the stack initially
+     */
+    public void setInitialData(int[] data) {
+        this.initialData = data;
     }
 
     public static void main(String[] args) {
