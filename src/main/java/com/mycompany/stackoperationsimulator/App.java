@@ -8,9 +8,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -58,9 +61,11 @@ public class App extends Application {
         VBox controls = createControlPanel();
         root.setLeft(controls);
 
-        // Create and configure center (stack visualization)
-        stackVisualization = createVisualizationPanel();
-        root.setCenter(stackVisualization);
+        // Create separator between controls and visualization
+        Region separator = new Region();
+        separator.getStyleClass().add("separator");
+        separator.setPrefWidth(2);
+        root.setCenter(createCenterLayout());
 
         // Create and configure bottom (status label)
         statusLabel = createStatusLabel();
@@ -72,6 +77,11 @@ public class App extends Application {
 
         // Create and set scene
         Scene scene = new Scene(root, 800, 600);
+
+        // Load external CSS stylesheet
+        String css = getClass().getResource("styles.css").toExternalForm();
+        scene.getStylesheets().add(css);
+
         stage.setScene(scene);
         stage.show();
     }
@@ -85,38 +95,46 @@ public class App extends Application {
         VBox controls = new VBox(10);
         controls.setPadding(new Insets(20));
         controls.setAlignment(Pos.TOP_CENTER);
+        controls.getStyleClass().add("control-panel");
 
         // Label for input
         Label inputLabel = new Label("Enter Value:");
+        inputLabel.getStyleClass().add("input-label");
 
         // TextField for numeric input
         inputField = new TextField();
         inputField.setPromptText("Enter integer");
         inputField.setPrefWidth(120);
 
-        // Create buttons
+        // Create buttons with CSS styling
         pushButton = new Button("Push");
         pushButton.setPrefWidth(120);
+        pushButton.getStyleClass().add("primary-button");
         pushButton.setOnAction(e -> handlePush());
 
         popButton = new Button("Pop");
         popButton.setPrefWidth(120);
+        popButton.getStyleClass().add("primary-button");
         popButton.setOnAction(e -> handlePop());
 
         peekButton = new Button("Peek");
         peekButton.setPrefWidth(120);
+        peekButton.getStyleClass().add("primary-button");
         peekButton.setOnAction(e -> handlePeek());
 
         Button sizeButton = new Button("Size");
         sizeButton.setPrefWidth(120);
+        sizeButton.getStyleClass().add("secondary-button");
         sizeButton.setOnAction(e -> handleSize());
 
         Button isEmptyButton = new Button("Is Empty");
         isEmptyButton.setPrefWidth(120);
+        isEmptyButton.getStyleClass().add("secondary-button");
         isEmptyButton.setOnAction(e -> handleIsEmpty());
 
         Button clearButton = new Button("Clear Stack");
         clearButton.setPrefWidth(120);
+        clearButton.getStyleClass().add("clear-button");
         clearButton.setOnAction(e -> handleClear());
 
         // Add all components to controls VBox
@@ -135,6 +153,28 @@ public class App extends Application {
     }
 
     /**
+     * Creates the center layout with separator and visualization panel.
+     *
+     * @return HBox containing separator and visualization
+     */
+    private HBox createCenterLayout() {
+        HBox centerLayout = new HBox();
+
+        // Create separator
+        Region separator = new Region();
+        separator.getStyleClass().add("separator");
+        separator.setPrefWidth(2);
+
+        // Create visualization panel
+        stackVisualization = createVisualizationPanel();
+
+        centerLayout.getChildren().addAll(separator, stackVisualization);
+        HBox.setHgrow(stackVisualization, Priority.ALWAYS);
+
+        return centerLayout;
+    }
+
+    /**
      * Creates the visualization panel for displaying stack elements.
      *
      * @return VBox configured for stack visualization
@@ -143,7 +183,7 @@ public class App extends Application {
         VBox visualization = new VBox(5);
         visualization.setAlignment(Pos.BOTTOM_CENTER);
         visualization.setPadding(new Insets(20));
-        visualization.setStyle("-fx-background-color: #f0f0f0;");
+        visualization.getStyleClass().add("visualization-panel");
 
         return visualization;
     }
@@ -155,7 +195,7 @@ public class App extends Application {
      */
     private Label createStatusLabel() {
         Label label = new Label("Ready");
-        label.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+        label.getStyleClass().add("status-label");
         label.setAlignment(Pos.CENTER);
         label.setMaxWidth(Double.MAX_VALUE);
 
@@ -260,6 +300,7 @@ public class App extends Application {
     /**
      * Updates the visual representation of the stack.
      * Displays current elements, empty slots, and capacity indicator.
+     * Uses value-based color coding: green for positive, red for negative, blue for zero.
      */
     private void updateStackDisplay() {
         // Clear current display
@@ -267,7 +308,7 @@ public class App extends Application {
 
         // Add capacity indicator
         Label capacityLabel = new Label("Capacity: " + STACK_CAPACITY);
-        capacityLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: gray;");
+        capacityLabel.getStyleClass().add("capacity-label");
         stackVisualization.getChildren().add(capacityLabel);
 
         // Get current stack elements
@@ -280,25 +321,26 @@ public class App extends Application {
             elementBox.setAlignment(Pos.CENTER);
             elementBox.setPadding(new Insets(10));
             elementBox.setPrefHeight(50);
-            elementBox.setStyle(
-                "-fx-background-color: #87CEEB; " +
-                "-fx-border-color: black; " +
-                "-fx-border-width: 2px;"
-            );
+            elementBox.setPrefWidth(200);
+
+            // Apply CSS class based on value (positive, negative, or zero)
+            if (elements[i] > 0) {
+                elementBox.getStyleClass().add("stack-element-positive");
+            } else if (elements[i] < 0) {
+                elementBox.getStyleClass().add("stack-element-negative");
+            } else {
+                elementBox.getStyleClass().add("stack-element-zero");
+            }
 
             Label valueLabel = new Label(String.valueOf(elements[i]));
-            valueLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+            valueLabel.getStyleClass().add("stack-value-label");
 
             elementBox.getChildren().add(valueLabel);
 
             // Add TOP indicator for topmost element
             if (i == elements.length - 1) {
                 Label topIndicator = new Label(" ← TOP");
-                topIndicator.setStyle(
-                    "-fx-text-fill: red; " +
-                    "-fx-font-size: 14px; " +
-                    "-fx-font-weight: bold;"
-                );
+                topIndicator.getStyleClass().add("top-indicator");
                 elementBox.getChildren().add(topIndicator);
             }
 
@@ -312,15 +354,11 @@ public class App extends Application {
             emptyBox.setAlignment(Pos.CENTER);
             emptyBox.setPadding(new Insets(10));
             emptyBox.setPrefHeight(50);
-            emptyBox.setStyle(
-                "-fx-background-color: white; " +
-                "-fx-border-color: black; " +
-                "-fx-border-width: 2px; " +
-                "-fx-border-style: dashed;"
-            );
+            emptyBox.setPrefWidth(200);
+            emptyBox.getStyleClass().add("empty-slot");
 
             Label emptyLabel = new Label("---");
-            emptyLabel.setStyle("-fx-font-size: 18px; -fx-text-fill: lightgray;");
+            emptyLabel.getStyleClass().add("empty-slot-label");
 
             emptyBox.getChildren().add(emptyLabel);
             stackVisualization.getChildren().add(emptyBox);
@@ -358,36 +396,32 @@ public class App extends Application {
     }
 
     /**
-     * Sets the status label text with specified color.
+     * Sets the status label text with specified color using CSS classes.
      *
      * @param message the message to display
      * @param color the color name (green, red, blue, orange)
      */
     private void setStatusText(String message, String color) {
-        String colorCode;
+        statusLabel.setText(message);
+
+        // Remove all color-related CSS classes
+        statusLabel.getStyleClass().removeAll("status-success", "status-error", "status-info", "status-warning");
+
+        // Add appropriate CSS class based on color
         switch (color.toLowerCase()) {
             case "green":
-                colorCode = "#2E7D32";
+                statusLabel.getStyleClass().add("status-success");
                 break;
             case "red":
-                colorCode = "#C62828";
+                statusLabel.getStyleClass().add("status-error");
                 break;
             case "blue":
-                colorCode = "#1565C0";
+                statusLabel.getStyleClass().add("status-info");
                 break;
             case "orange":
-                colorCode = "#EF6C00";
+                statusLabel.getStyleClass().add("status-warning");
                 break;
-            default:
-                colorCode = "black";
         }
-
-        statusLabel.setText(message);
-        statusLabel.setStyle(
-            "-fx-font-size: 14px; " +
-            "-fx-padding: 10px; " +
-            "-fx-text-fill: " + colorCode + ";"
-        );
     }
 
     public static void main(String[] args) {
