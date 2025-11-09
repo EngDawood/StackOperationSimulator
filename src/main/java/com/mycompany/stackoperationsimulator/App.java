@@ -349,7 +349,14 @@ public class App extends Application {
         lastOperationLabel = new Label("");
         lastOperationLabel.getStyleClass().add("status-bar-value");
 
-        statusBar.getChildren().addAll(lastOpLabel, lastOperationLabel);
+        // Create and initialize statusLabel
+        statusLabel = createStatusLabel();
+
+        // Add a spacer region to push status label to the right
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        statusBar.getChildren().addAll(lastOpLabel, lastOperationLabel, spacer, statusLabel);
 
         statusContainer.getChildren().addAll(separator, statusBar);
 
@@ -467,6 +474,9 @@ public class App extends Application {
     private void handleSize() {
         int size = stack.size();
         setStatusText("Stack size: " + size, "blue");
+        lastOperationLabel.setText("Size: " + size + " | No change");
+        lastOperationLabel.getStyleClass().removeAll("status-success", "status-error", "status-info", "status-warning");
+        lastOperationLabel.getStyleClass().add("status-info");
     }
 
     /**
@@ -476,6 +486,9 @@ public class App extends Application {
     private void handleIsEmpty() {
         boolean empty = stack.isEmpty();
         setStatusText("Stack is empty: " + empty, "blue");
+        lastOperationLabel.setText("Is Empty: " + (empty ? "Yes" : "No") + " | No change");
+        lastOperationLabel.getStyleClass().removeAll("status-success", "status-error", "status-info", "status-warning");
+        lastOperationLabel.getStyleClass().add("status-info");
     }
 
     /**
