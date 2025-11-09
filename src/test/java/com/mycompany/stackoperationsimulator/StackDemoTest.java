@@ -62,36 +62,36 @@ class StackDemoTest {
     @Test
     @DisplayName("Push single element and verify")
     void testPushSingleElement() {
-        stack.push(42);
+        stack.push(42.0);
         assertFalse(stack.isEmpty());
         assertEquals(1, stack.size());
-        assertEquals(42, stack.peek());
+        assertEquals(42.0, stack.peek());
     }
 
     @Test
     @DisplayName("Push multiple elements sequentially")
     void testPushMultipleElements() {
-        stack.push(10);
-        stack.push(20);
-        stack.push(30);
+        stack.push(10.0);
+        stack.push(20.0);
+        stack.push(30.0);
 
         assertEquals(3, stack.size());
-        assertEquals(30, stack.peek());
+        assertEquals(30.0, stack.peek());
 
-        int[] elements = stack.getElements();
-        assertArrayEquals(new int[]{10, 20, 30}, elements);
+        double[] elements = stack.getElements();
+        assertArrayEquals(new double[]{10.0, 20.0, 30.0}, elements);
     }
 
     @Test
     @DisplayName("Push until stack is full")
     void testPushUntilFull() {
         for (int i = 1; i <= TEST_CAPACITY; i++) {
-            stack.push(i * 10);
+            stack.push(i * 10.0);
         }
 
         assertTrue(stack.isFull());
         assertEquals(TEST_CAPACITY, stack.size());
-        assertEquals(50, stack.peek()); // Last element pushed
+        assertEquals(50.0, stack.peek()); // Last element pushed
     }
 
     @Test
@@ -99,12 +99,12 @@ class StackDemoTest {
     void testPushOverflow() {
         // Fill the stack
         for (int i = 0; i < TEST_CAPACITY; i++) {
-            stack.push(i);
+            stack.push((double) i);
         }
 
         // Attempt to push one more
         Exception exception = assertThrows(IllegalStateException.class, () -> {
-            stack.push(999);
+            stack.push(999.0);
         });
 
         assertEquals("Stack Overflow", exception.getMessage());
@@ -114,54 +114,54 @@ class StackDemoTest {
     @Test
     @DisplayName("Push negative numbers")
     void testPushNegativeNumbers() {
-        stack.push(-10);
-        stack.push(-25);
-        stack.push(-100);
+        stack.push(-10.0);
+        stack.push(-25.0);
+        stack.push(-100.0);
 
         assertEquals(3, stack.size());
-        assertEquals(-100, stack.peek());
+        assertEquals(-100.0, stack.peek());
 
-        int[] elements = stack.getElements();
-        assertArrayEquals(new int[]{-10, -25, -100}, elements);
+        double[] elements = stack.getElements();
+        assertArrayEquals(new double[]{-10.0, -25.0, -100.0}, elements);
     }
 
     @Test
     @DisplayName("Push zero")
     void testPushZero() {
-        stack.push(0);
-        stack.push(5);
-        stack.push(0);
+        stack.push(0.0);
+        stack.push(5.0);
+        stack.push(0.0);
 
         assertEquals(3, stack.size());
-        assertEquals(0, stack.peek());
+        assertEquals(0.0, stack.peek());
 
-        int[] elements = stack.getElements();
-        assertArrayEquals(new int[]{0, 5, 0}, elements);
+        double[] elements = stack.getElements();
+        assertArrayEquals(new double[]{0.0, 5.0, 0.0}, elements);
     }
 
     @Test
     @DisplayName("Push large numbers")
     void testPushLargeNumbers() {
-        stack.push(Integer.MAX_VALUE);
-        stack.push(1000000);
-        stack.push(Integer.MIN_VALUE);
+        stack.push(Double.MAX_VALUE);
+        stack.push(1000000.0);
+        stack.push(Double.MIN_VALUE);
 
         assertEquals(3, stack.size());
-        assertEquals(Integer.MIN_VALUE, stack.peek());
+        assertEquals(Double.MIN_VALUE, stack.peek());
     }
 
     @Test
     @DisplayName("Push mixed positive, negative, and zero values")
     void testPushMixedValues() {
-        stack.push(100);
-        stack.push(-50);
-        stack.push(0);
-        stack.push(75);
-        stack.push(-25);
+        stack.push(100.0);
+        stack.push(-50.0);
+        stack.push(0.0);
+        stack.push(75.0);
+        stack.push(-25.0);
 
         assertEquals(5, stack.size());
-        int[] elements = stack.getElements();
-        assertArrayEquals(new int[]{100, -50, 0, 75, -25}, elements);
+        double[] elements = stack.getElements();
+        assertArrayEquals(new double[]{100.0, -50.0, 0.0, 75.0, -25.0}, elements);
     }
 
     // ============================================================
@@ -171,27 +171,27 @@ class StackDemoTest {
     @Test
     @DisplayName("Pop from stack with multiple elements")
     void testPopWithMultipleElements() {
-        stack.push(10);
-        stack.push(20);
-        stack.push(30);
+        stack.push(10.0);
+        stack.push(20.0);
+        stack.push(30.0);
 
-        int poppedValue = stack.pop();
+        double poppedValue = stack.pop();
 
-        assertEquals(30, poppedValue);
+        assertEquals(30.0, poppedValue);
         assertEquals(2, stack.size());
-        assertEquals(20, stack.peek());
+        assertEquals(20.0, stack.peek());
     }
 
     @Test
     @DisplayName("Pop until stack is empty")
     void testPopUntilEmpty() {
-        stack.push(10);
-        stack.push(20);
-        stack.push(30);
+        stack.push(10.0);
+        stack.push(20.0);
+        stack.push(30.0);
 
-        assertEquals(30, stack.pop());
-        assertEquals(20, stack.pop());
-        assertEquals(10, stack.pop());
+        assertEquals(30.0, stack.pop());
+        assertEquals(20.0, stack.pop());
+        assertEquals(10.0, stack.pop());
 
         assertTrue(stack.isEmpty());
         assertEquals(0, stack.size());
@@ -213,18 +213,18 @@ class StackDemoTest {
     @DisplayName("Verify LIFO order - last pushed is first popped")
     void testLIFOOrder() {
         // Push elements in sequence
-        stack.push(1);
-        stack.push(2);
-        stack.push(3);
-        stack.push(4);
-        stack.push(5);
+        stack.push(1.0);
+        stack.push(2.0);
+        stack.push(3.0);
+        stack.push(4.0);
+        stack.push(5.0);
 
         // Pop elements and verify reverse order
-        assertEquals(5, stack.pop());
-        assertEquals(4, stack.pop());
-        assertEquals(3, stack.pop());
-        assertEquals(2, stack.pop());
-        assertEquals(1, stack.pop());
+        assertEquals(5.0, stack.pop());
+        assertEquals(4.0, stack.pop());
+        assertEquals(3.0, stack.pop());
+        assertEquals(2.0, stack.pop());
+        assertEquals(1.0, stack.pop());
 
         assertTrue(stack.isEmpty());
     }
@@ -232,10 +232,10 @@ class StackDemoTest {
     @Test
     @DisplayName("Pop after filling and verify LIFO with specific values")
     void testPopAfterFilling() {
-        int[] values = {100, 200, 300, 400, 500};
+        double[] values = {100.0, 200.0, 300.0, 400.0, 500.0};
 
         // Push all values
-        for (int value : values) {
+        for (double value : values) {
             stack.push(value);
         }
 
@@ -252,14 +252,14 @@ class StackDemoTest {
     @Test
     @DisplayName("Peek at stack with elements - verify no removal")
     void testPeekWithElements() {
-        stack.push(100);
-        stack.push(200);
+        stack.push(100.0);
+        stack.push(200.0);
 
-        int peekedValue = stack.peek();
+        double peekedValue = stack.peek();
 
-        assertEquals(200, peekedValue);
+        assertEquals(200.0, peekedValue);
         assertEquals(2, stack.size()); // Size should remain unchanged
-        assertEquals(200, stack.peek()); // Should still be the same value
+        assertEquals(200.0, stack.peek()); // Should still be the same value
     }
 
     @Test
@@ -277,11 +277,11 @@ class StackDemoTest {
     @Test
     @DisplayName("Peek multiple times returns same value")
     void testPeekMultipleTimes() {
-        stack.push(42);
+        stack.push(42.0);
 
-        assertEquals(42, stack.peek());
-        assertEquals(42, stack.peek());
-        assertEquals(42, stack.peek());
+        assertEquals(42.0, stack.peek());
+        assertEquals(42.0, stack.peek());
+        assertEquals(42.0, stack.peek());
 
         // Verify size hasn't changed
         assertEquals(1, stack.size());
@@ -290,17 +290,17 @@ class StackDemoTest {
     @Test
     @DisplayName("Peek after push and pop operations")
     void testPeekAfterPushPop() {
-        stack.push(10);
-        stack.push(20);
-        stack.push(30);
+        stack.push(10.0);
+        stack.push(20.0);
+        stack.push(30.0);
 
-        assertEquals(30, stack.peek());
-
-        stack.pop();
-        assertEquals(20, stack.peek());
+        assertEquals(30.0, stack.peek());
 
         stack.pop();
-        assertEquals(10, stack.peek());
+        assertEquals(20.0, stack.peek());
+
+        stack.pop();
+        assertEquals(10.0, stack.peek());
     }
 
     // ============================================================
@@ -312,22 +312,22 @@ class StackDemoTest {
     void testSizeAfterPush() {
         assertEquals(0, stack.size());
 
-        stack.push(10);
+        stack.push(10.0);
         assertEquals(1, stack.size());
 
-        stack.push(20);
+        stack.push(20.0);
         assertEquals(2, stack.size());
 
-        stack.push(30);
+        stack.push(30.0);
         assertEquals(3, stack.size());
     }
 
     @Test
     @DisplayName("Size after each pop operation")
     void testSizeAfterPop() {
-        stack.push(10);
-        stack.push(20);
-        stack.push(30);
+        stack.push(10.0);
+        stack.push(20.0);
+        stack.push(30.0);
         assertEquals(3, stack.size());
 
         stack.pop();
@@ -345,15 +345,15 @@ class StackDemoTest {
     void testSizeAfterMixedOperations() {
         assertEquals(0, stack.size());
 
-        stack.push(1);
-        stack.push(2);
+        stack.push(1.0);
+        stack.push(2.0);
         assertEquals(2, stack.size());
 
         stack.pop();
         assertEquals(1, stack.size());
 
-        stack.push(3);
-        stack.push(4);
+        stack.push(3.0);
+        stack.push(4.0);
         assertEquals(3, stack.size());
 
         stack.pop();
@@ -377,7 +377,7 @@ class StackDemoTest {
     void testIsEmptyAfterPush() {
         assertTrue(stack.isEmpty());
 
-        stack.push(42);
+        stack.push(42.0);
 
         assertFalse(stack.isEmpty());
     }
@@ -385,9 +385,9 @@ class StackDemoTest {
     @Test
     @DisplayName("isEmpty returns true after popping all elements")
     void testIsEmptyAfterPoppingAll() {
-        stack.push(10);
-        stack.push(20);
-        stack.push(30);
+        stack.push(10.0);
+        stack.push(20.0);
+        stack.push(30.0);
 
         assertFalse(stack.isEmpty());
 
@@ -403,14 +403,14 @@ class StackDemoTest {
     void testIsEmptyAfterVariousOperations() {
         assertTrue(stack.isEmpty());
 
-        stack.push(1);
+        stack.push(1.0);
         assertFalse(stack.isEmpty());
 
         stack.pop();
         assertTrue(stack.isEmpty());
 
-        stack.push(2);
-        stack.push(3);
+        stack.push(2.0);
+        stack.push(3.0);
         assertFalse(stack.isEmpty());
     }
 
@@ -429,7 +429,7 @@ class StackDemoTest {
     void testIsFullWhenAtCapacity() {
         for (int i = 0; i < TEST_CAPACITY; i++) {
             assertFalse(stack.isFull());
-            stack.push(i);
+            stack.push((double) i);
         }
 
         assertTrue(stack.isFull());
@@ -440,7 +440,7 @@ class StackDemoTest {
     void testIsFullAfterPop() {
         // Fill the stack
         for (int i = 0; i < TEST_CAPACITY; i++) {
-            stack.push(i);
+            stack.push((double) i);
         }
 
         assertTrue(stack.isFull());
@@ -457,7 +457,7 @@ class StackDemoTest {
     @Test
     @DisplayName("getElements returns empty array for empty stack")
     void testGetElementsEmptyStack() {
-        int[] elements = stack.getElements();
+        double[] elements = stack.getElements();
 
         assertNotNull(elements);
         assertEquals(0, elements.length);
@@ -466,23 +466,23 @@ class StackDemoTest {
     @Test
     @DisplayName("getElements returns correct array for stack with elements")
     void testGetElementsWithElements() {
-        stack.push(10);
-        stack.push(20);
-        stack.push(30);
+        stack.push(10.0);
+        stack.push(20.0);
+        stack.push(30.0);
 
-        int[] elements = stack.getElements();
+        double[] elements = stack.getElements();
 
-        assertArrayEquals(new int[]{10, 20, 30}, elements);
+        assertArrayEquals(new double[]{10.0, 20.0, 30.0}, elements);
     }
 
     @Test
     @DisplayName("getElements returns independent copy of stack contents")
     void testGetElementsReturnsIndependentCopy() {
-        stack.push(100);
-        stack.push(200);
+        stack.push(100.0);
+        stack.push(200.0);
 
-        int[] elements1 = stack.getElements();
-        int[] elements2 = stack.getElements();
+        double[] elements1 = stack.getElements();
+        double[] elements2 = stack.getElements();
 
         // Verify they have the same values
         assertArrayEquals(elements1, elements2);
@@ -491,11 +491,11 @@ class StackDemoTest {
         assertNotSame(elements1, elements2);
 
         // Modify one array
-        elements1[0] = 999;
+        elements1[0] = 999.0;
 
         // Verify the modification doesn't affect the stack
-        int[] elements3 = stack.getElements();
-        assertEquals(100, elements3[0]);
+        double[] elements3 = stack.getElements();
+        assertEquals(100.0, elements3[0]);
     }
 
     @Test
@@ -503,13 +503,13 @@ class StackDemoTest {
     void testGetElementsAfterFullStackOperations() {
         // Fill the stack
         for (int i = 1; i <= TEST_CAPACITY; i++) {
-            stack.push(i * 10);
+            stack.push(i * 10.0);
         }
 
-        int[] elements = stack.getElements();
+        double[] elements = stack.getElements();
 
         assertEquals(TEST_CAPACITY, elements.length);
-        assertArrayEquals(new int[]{10, 20, 30, 40, 50}, elements);
+        assertArrayEquals(new double[]{10.0, 20.0, 30.0, 40.0, 50.0}, elements);
     }
 
     // ============================================================
@@ -524,26 +524,26 @@ class StackDemoTest {
         assertEquals(0, stack.size());
 
         // Push some elements
-        stack.push(5);
-        stack.push(10);
-        stack.push(15);
+        stack.push(5.0);
+        stack.push(10.0);
+        stack.push(15.0);
         assertEquals(3, stack.size());
-        assertEquals(15, stack.peek());
+        assertEquals(15.0, stack.peek());
 
         // Pop one element
-        assertEquals(15, stack.pop());
+        assertEquals(15.0, stack.pop());
         assertEquals(2, stack.size());
 
         // Push more elements
-        stack.push(20);
-        stack.push(25);
+        stack.push(20.0);
+        stack.push(25.0);
         assertEquals(4, stack.size());
 
         // Verify LIFO order
-        assertEquals(25, stack.pop());
-        assertEquals(20, stack.pop());
-        assertEquals(10, stack.pop());
-        assertEquals(5, stack.pop());
+        assertEquals(25.0, stack.pop());
+        assertEquals(20.0, stack.pop());
+        assertEquals(10.0, stack.pop());
+        assertEquals(5.0, stack.pop());
 
         // Stack should be empty
         assertTrue(stack.isEmpty());
@@ -554,7 +554,7 @@ class StackDemoTest {
     void testComplexScenario2() {
         // Fill the stack
         for (int i = 1; i <= TEST_CAPACITY; i++) {
-            stack.push(i);
+            stack.push((double) i);
         }
         assertTrue(stack.isFull());
 
@@ -566,35 +566,35 @@ class StackDemoTest {
 
         // Refill with different values
         for (int i = 10; i <= 10 + TEST_CAPACITY - 1; i++) {
-            stack.push(i);
+            stack.push((double) i);
         }
 
         assertTrue(stack.isFull());
-        assertEquals(14, stack.peek());
+        assertEquals(14.0, stack.peek());
     }
 
     @Test
     @DisplayName("Complex scenario: Alternating push and pop operations")
     void testComplexScenario3() {
-        stack.push(1);
+        stack.push(1.0);
         assertEquals(1, stack.size());
 
-        stack.push(2);
+        stack.push(2.0);
         assertEquals(2, stack.size());
 
-        assertEquals(2, stack.pop());
+        assertEquals(2.0, stack.pop());
         assertEquals(1, stack.size());
 
-        stack.push(3);
-        stack.push(4);
+        stack.push(3.0);
+        stack.push(4.0);
         assertEquals(3, stack.size());
 
-        assertEquals(4, stack.pop());
-        assertEquals(3, stack.pop());
+        assertEquals(4.0, stack.pop());
+        assertEquals(3.0, stack.pop());
         assertEquals(1, stack.size());
 
         assertFalse(stack.isEmpty());
-        assertEquals(1, stack.peek());
+        assertEquals(1.0, stack.peek());
     }
 
     @Test
@@ -605,18 +605,18 @@ class StackDemoTest {
         assertTrue(tinyStack.isEmpty());
         assertFalse(tinyStack.isFull());
 
-        tinyStack.push(42);
+        tinyStack.push(42.0);
 
         assertFalse(tinyStack.isEmpty());
         assertTrue(tinyStack.isFull());
-        assertEquals(42, tinyStack.peek());
+        assertEquals(42.0, tinyStack.peek());
 
         // Cannot push another
         assertThrows(IllegalStateException.class, () -> {
-            tinyStack.push(99);
+            tinyStack.push(99.0);
         });
 
-        assertEquals(42, tinyStack.pop());
+        assertEquals(42.0, tinyStack.pop());
         assertTrue(tinyStack.isEmpty());
     }
 
@@ -627,7 +627,7 @@ class StackDemoTest {
 
         // Push 1000 elements
         for (int i = 0; i < 1000; i++) {
-            largeStack.push(i);
+            largeStack.push((double) i);
         }
 
         assertTrue(largeStack.isFull());
@@ -635,7 +635,7 @@ class StackDemoTest {
 
         // Pop all elements and verify LIFO
         for (int i = 999; i >= 0; i--) {
-            assertEquals(i, largeStack.pop());
+            assertEquals((double) i, largeStack.pop());
         }
 
         assertTrue(largeStack.isEmpty());

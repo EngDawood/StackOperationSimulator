@@ -26,7 +26,7 @@ public class StackDemo {
     /**
      * Internal array to store stack elements.
      */
-    private int[] array;
+    private double[] array;
 
     /**
      * Index of the top element in the stack.
@@ -53,7 +53,7 @@ public class StackDemo {
             throw new IllegalArgumentException("Capacity must be positive");
         }
         this.capacity = capacity;
-        this.array = new int[capacity];
+        this.array = new double[capacity];
         this.top = -1;
     }
 
@@ -95,10 +95,10 @@ public class StackDemo {
      * stack.push(30);  // Stack: [10, 20, 30]
      * </pre>
      *
-     * @param element the integer value to push onto the stack
+     * @param element the double value to push onto the stack
      * @throws IllegalStateException if the stack is full (overflow condition)
      */
-    public void push(int element) {
+    public void push(double element) {
         if (isFull()) {
             throw new IllegalStateException("Stack Overflow");
         }
@@ -128,13 +128,13 @@ public class StackDemo {
      * @return the element at the top of the stack
      * @throws IllegalStateException if the stack is empty (underflow condition)
      */
-    public int pop() {
+    public double pop() {
         if (isEmpty()) {
             throw new IllegalStateException("Stack Underflow");
         }
         // Store the element before decrementing top
         // This ensures we return the correct value
-        int element = array[top];
+        double element = array[top];
         top--;
         return element;
     }
@@ -158,7 +158,7 @@ public class StackDemo {
      * @return the element at the top of the stack
      * @throws IllegalStateException if the stack is empty
      */
-    public int peek() {
+    public double peek() {
         if (isEmpty()) {
             throw new IllegalStateException("Stack is empty");
         }
@@ -215,9 +215,9 @@ public class StackDemo {
      *
      * @return a new array containing all current stack elements from bottom to top
      */
-    public int[] getElements() {
+    public double[] getElements() {
         // Create array of exact size needed (current stack size)
-        int[] elements = new int[size()];
+        double[] elements = new double[size()];
 
         // Copy elements from index 0 to top
         // This preserves the bottom-to-top ordering
