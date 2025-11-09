@@ -336,15 +336,15 @@ Add Javadoc comments to all methods in StackDemo class:
 ## Progress Checklist
 
 ### Core Stack Implementation
-- [ ] StackDemo class created with instance variables
-- [ ] Constructor implemented with capacity initialization
-- [ ] isEmpty() method implemented
-- [ ] isFull() method implemented
-- [ ] push() method with overflow handling
-- [ ] pop() method with underflow handling
-- [ ] peek() method implemented
-- [ ] size() method implemented
-- [ ] getElements() method for visualization
+- [x] StackDemo class created with instance variables
+- [x] Constructor implemented with capacity initialization
+- [x] isEmpty() method implemented
+- [x] isFull() method implemented
+- [x] push() method with overflow handling
+- [x] pop() method with underflow handling
+- [x] peek() method implemented
+- [x] size() method implemented
+- [x] getElements() method for visualization
 
 ### JavaFX Application
 - [ ] Main application class extending Application
@@ -397,11 +397,11 @@ Add Javadoc comments to all methods in StackDemo class:
 - [ ] LIFO order verified
 
 ### Documentation
-- [ ] Javadoc comments added
-- [ ] Method documentation complete
-- [ ] Inline comments for complex logic
+- [x] Javadoc comments added
+- [x] Method documentation complete
+- [x] Inline comments for complex logic
 - [ ] README usage guide written
-- [ ] Code formatted consistently
+- [x] Code formatted consistently
 
 ---
 
