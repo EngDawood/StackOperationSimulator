@@ -47,7 +47,7 @@ public class StackLauncher extends Application {
         // Stage configuration
         stage.setTitle("Stack Simulator Launcher");
         stage.setWidth(500);
-        stage.setHeight(400);
+        stage.setHeight(450);
         stage.setResizable(false);
 
         // Create root layout
@@ -64,7 +64,7 @@ public class StackLauncher extends Application {
         );
 
         // Create and set scene
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, 500, 450);
 
         // Load external CSS stylesheet
         String css = getClass().getResource("styles.css").toExternalForm();
@@ -195,29 +195,37 @@ public class StackLauncher extends Application {
      * @return HBox containing the action buttons
      */
     private HBox createButtonPanel() {
-        HBox buttonPanel = new HBox(15);
+        HBox buttonPanel = new HBox(20);
         buttonPanel.setAlignment(Pos.CENTER);
-        buttonPanel.setPadding(new Insets(20, 0, 0, 0));
+        buttonPanel.setPadding(new Insets(30, 0, 0, 0));
 
         // Start Simulator Button
         Button startButton = new Button("Start Simulator");
         startButton.setPrefWidth(150);
+        startButton.setPrefHeight(40);
         startButton.getStyleClass().add("launcher-start-button");
         startButton.setStyle(
             "-fx-background-color: #4CAF50; " +
             "-fx-text-fill: white; " +
-            "-fx-font-weight: bold;"
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 10px 20px; " +
+            "-fx-background-radius: 5px;"
         );
         startButton.setOnAction(e -> handleStartSimulator());
 
         // Exit Button
         Button exitButton = new Button("Exit");
         exitButton.setPrefWidth(150);
+        exitButton.setPrefHeight(40);
         exitButton.getStyleClass().add("launcher-exit-button");
         exitButton.setStyle(
             "-fx-background-color: #757575; " +
             "-fx-text-fill: white; " +
-            "-fx-font-weight: bold;"
+            "-fx-font-size: 14px; " +
+            "-fx-font-weight: bold; " +
+            "-fx-padding: 10px 20px; " +
+            "-fx-background-radius: 5px;"
         );
         exitButton.setOnAction(e -> handleExit());
 
@@ -237,13 +245,11 @@ public class StackLauncher extends Application {
         // Create new stage for main simulator
         Stage simulatorStage = new Stage();
 
+        // Create simulator with capacity using constructor
+        App simulator = new App(stackSize);
+
         // Check which radio button is selected
-        if (emptyStackRadio.isSelected()) {
-            // Create simulator with empty stack
-            App simulator = new App();
-            simulator.setStackCapacity(stackSize);
-            simulator.start(simulatorStage);
-        } else {
+        if (randomDataRadio.isSelected()) {
             // Random data selected
             int numberOfElements = randomCountSpinner.getValue();
 
@@ -251,10 +257,6 @@ public class StackLauncher extends Application {
             if (numberOfElements > stackSize) {
                 numberOfElements = stackSize;
             }
-
-            // Create simulator with capacity
-            App simulator = new App();
-            simulator.setStackCapacity(stackSize);
 
             // Generate random integers between -99 and 99
             Random random = new Random();
@@ -265,10 +267,10 @@ public class StackLauncher extends Application {
 
             // Set initial data
             simulator.setInitialData(initialData);
-
-            // Start simulator
-            simulator.start(simulatorStage);
         }
+
+        // Start simulator
+        simulator.start(simulatorStage);
 
         // Close launcher stage
         Stage launcherStage = (Stage) stackSizeSpinner.getScene().getWindow();

@@ -65,6 +65,22 @@ public class App extends Application {
     // Initial data for stack (optional)
     private int[] initialData = null;
 
+    /**
+     * Default constructor - initializes with default capacity of 12.
+     */
+    public App() {
+        this.stackCapacity = 12;
+    }
+
+    /**
+     * Constructor that accepts capacity parameter.
+     *
+     * @param capacity the maximum number of elements the stack can hold
+     */
+    public App(int capacity) {
+        this.stackCapacity = capacity;
+    }
+
     @Override
     public void start(Stage stage) {
         // Initialize stack
@@ -82,6 +98,16 @@ public class App extends Application {
             }
         }
 
+        // Initialize UI
+        initializeUI(stage);
+    }
+
+    /**
+     * Initializes all UI components and displays the stage.
+     *
+     * @param stage the primary stage for this application
+     */
+    private void initializeUI(Stage stage) {
         // Stage configuration
         stage.setTitle("Stack Operation Simulator");
         stage.setMinWidth(900);
@@ -660,6 +686,16 @@ public class App extends Application {
      */
     public void setInitialData(int[] data) {
         this.initialData = data;
+    }
+
+    /**
+     * Gets the stack instance for direct manipulation.
+     * Allows external classes (like launcher) to access the stack.
+     *
+     * @return the StackDemo instance
+     */
+    public StackDemo getStack() {
+        return stack;
     }
 
     public static void main(String[] args) {
