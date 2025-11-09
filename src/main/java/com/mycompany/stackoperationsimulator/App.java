@@ -1,5 +1,7 @@
 package com.mycompany.stackoperationsimulator;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,7 +10,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -16,6 +20,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * Stack Operation Simulator - JavaFX Application
@@ -40,6 +45,19 @@ public class App extends Application {
     private Button pushButton;
     private Button popButton;
     private Button peekButton;
+
+    // Information panel components
+    private Label maxSizeLabel;
+    private Label currentSizeLabel;
+    private Label isEmptyLabel;
+    private Label isFullLabel;
+
+    // Status bar components
+    private Label lastOperationLabel;
+
+    // Capacity display components
+    private Label capacityDisplayLabel;
+    private ProgressBar capacityProgressBar;
 
     // Stack capacity (configurable)
     private int stackCapacity = 12;
@@ -66,8 +84,8 @@ public class App extends Application {
 
         // Stage configuration
         stage.setTitle("Stack Operation Simulator");
-        stage.setMinWidth(600);
-        stage.setMinHeight(500);
+        stage.setMinWidth(900);
+        stage.setMinHeight(600);
 
         // Create root layout
         BorderPane root = new BorderPane();
@@ -82,16 +100,21 @@ public class App extends Application {
         separator.setPrefWidth(2);
         root.setCenter(createCenterLayout());
 
-        // Create and configure bottom (status label)
-        statusLabel = createStatusLabel();
-        root.setBottom(statusLabel);
+        // Create and configure right side (information panel)
+        VBox infoPanel = createInformationPanel();
+        root.setRight(infoPanel);
+
+        // Create and configure bottom (status bar)
+        HBox statusBar = createStatusBar();
+        root.setBottom(statusBar);
 
         // Initial display update
         updateStackDisplay();
         updateButtonStates();
+        updateInformationPanel();
 
         // Create and set scene
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1000, 650);
 
         // Load external CSS stylesheet
         String css = getClass().getResource("styles.css").toExternalForm();
@@ -218,6 +241,110 @@ public class App extends Application {
     }
 
     /**
+     * Creates the information panel for the right side of the screen.
+     *
+     * @return VBox containing stack information and operation descriptions
+     */
+    private VBox createInformationPanel() {
+        VBox infoPanel = new VBox(15);
+        infoPanel.setPadding(new Insets(20));
+        infoPanel.setPrefWidth(250);
+        infoPanel.getStyleClass().add("info-panel");
+
+        // Stack Information Section
+        Label infoHeader = new Label("Stack Information");
+        infoHeader.getStyleClass().add("info-header");
+
+        Separator separator1 = new Separator();
+
+        maxSizeLabel = new Label("Maximum Size: " + stackCapacity);
+        maxSizeLabel.getStyleClass().add("info-label");
+
+        currentSizeLabel = new Label("Current Size: 0");
+        currentSizeLabel.getStyleClass().add("info-label");
+
+        isEmptyLabel = new Label("Is Empty: Yes");
+        isEmptyLabel.getStyleClass().add("info-label");
+
+        isFullLabel = new Label("Is Full: No");
+        isFullLabel.getStyleClass().add("info-label");
+
+        // Operation Descriptions Section
+        Label opsHeader = new Label("Stack Operations:");
+        opsHeader.getStyleClass().add("info-header");
+
+        Separator separator2 = new Separator();
+
+        TextArea opsDescription = new TextArea(
+            "Push: Adds an element to the top of the stack\n\n" +
+            "Pop: Removes and returns the element at the top of the stack\n\n" +
+            "Peek: Returns the top element without removing it\n\n" +
+            "LIFO Principle:\n" +
+            "Last-In-First-Out"
+        );
+        opsDescription.setEditable(false);
+        opsDescription.setWrapText(true);
+        opsDescription.setPrefHeight(300);
+        opsDescription.getStyleClass().add("ops-description");
+
+        infoPanel.getChildren().addAll(
+            infoHeader,
+            separator1,
+            maxSizeLabel,
+            currentSizeLabel,
+            isEmptyLabel,
+            isFullLabel,
+            opsHeader,
+            separator2,
+            opsDescription
+        );
+
+        return infoPanel;
+    }
+
+    /**
+     * Creates the status bar at the bottom of the screen.
+     *
+     * @return HBox containing status bar components
+     */
+    private HBox createStatusBar() {
+        HBox statusBar = new HBox(20);
+        statusBar.setPadding(new Insets(10));
+        statusBar.setAlignment(Pos.CENTER_LEFT);
+        statusBar.getStyleClass().add("status-bar");
+
+        // Add separator line above status bar
+        VBox statusContainer = new VBox();
+        Separator separator = new Separator();
+
+        Label lastOpLabel = new Label("Last Operation:");
+        lastOpLabel.getStyleClass().add("status-bar-label");
+
+        lastOperationLabel = new Label("");
+        lastOperationLabel.getStyleClass().add("status-bar-value");
+
+        statusBar.getChildren().addAll(lastOpLabel, lastOperationLabel);
+
+        statusContainer.getChildren().addAll(separator, statusBar);
+
+        // Return the container with separator and status bar
+        return statusBar;
+    }
+
+    /**
+     * Updates the information panel with current stack state.
+     */
+    private void updateInformationPanel() {
+        int size = stack.size();
+        boolean isEmpty = stack.isEmpty();
+        boolean isFull = stack.isFull();
+
+        currentSizeLabel.setText("Current Size: " + size);
+        isEmptyLabel.setText("Is Empty: " + (isEmpty ? "Yes" : "No"));
+        isFullLabel.setText("Is Full: " + (isFull ? "Yes" : "No"));
+    }
+
+    /**
      * Handles the Push button action.
      * Validates input, pushes value to stack, and updates display.
      */
@@ -240,9 +367,20 @@ public class App extends Application {
 
             // Update status and display
             setStatusText("Pushed: " + value, "green");
+            lastOperationLabel.setText("Pushed: " + value + " | Stack Size: " + stack.size());
+            lastOperationLabel.getStyleClass().removeAll("status-success", "status-error", "status-info");
+            lastOperationLabel.getStyleClass().add("status-success");
+
             inputField.clear();
-            updateStackDisplay();
-            updateButtonStates();
+
+            // Animate the update
+            PauseTransition pause = new PauseTransition(Duration.millis(100));
+            pause.setOnFinished(e -> {
+                updateStackDisplay();
+                updateButtonStates();
+                updateInformationPanel();
+            });
+            pause.play();
 
         } catch (NumberFormatException e) {
             showAlert(AlertType.WARNING, "Invalid Input", "Please enter a valid integer value.");
@@ -261,8 +399,18 @@ public class App extends Application {
         try {
             int value = stack.pop();
             setStatusText("Popped: " + value, "green");
-            updateStackDisplay();
-            updateButtonStates();
+            lastOperationLabel.setText("Popped: " + value + " | Stack Size: " + stack.size());
+            lastOperationLabel.getStyleClass().removeAll("status-success", "status-error", "status-info");
+            lastOperationLabel.getStyleClass().add("status-success");
+
+            // Animate the fade out effect
+            PauseTransition pause = new PauseTransition(Duration.millis(300));
+            pause.setOnFinished(e -> {
+                updateStackDisplay();
+                updateButtonStates();
+                updateInformationPanel();
+            });
+            pause.play();
         } catch (IllegalStateException e) {
             showAlert(AlertType.ERROR, "Stack Underflow", e.getMessage());
             setStatusText(e.getMessage(), "red");
@@ -277,6 +425,9 @@ public class App extends Application {
         try {
             int value = stack.peek();
             setStatusText("Top element: " + value, "blue");
+            lastOperationLabel.setText("Peek: " + value + " | No change");
+            lastOperationLabel.getStyleClass().removeAll("status-success", "status-error", "status-info");
+            lastOperationLabel.getStyleClass().add("status-info");
         } catch (IllegalStateException e) {
             showAlert(AlertType.ERROR, "Stack Empty", e.getMessage());
             setStatusText(e.getMessage(), "red");
@@ -308,8 +459,12 @@ public class App extends Application {
     private void handleClear() {
         stack = new StackDemo(stackCapacity);
         setStatusText("Stack cleared", "orange");
+        lastOperationLabel.setText("Stack cleared | Stack Size: 0");
+        lastOperationLabel.getStyleClass().removeAll("status-success", "status-error", "status-info");
+        lastOperationLabel.getStyleClass().add("status-warning");
         updateStackDisplay();
         updateButtonStates();
+        updateInformationPanel();
     }
 
     /**
@@ -321,21 +476,50 @@ public class App extends Application {
         // Clear current display
         stackVisualization.getChildren().clear();
 
-        // Add capacity indicator
-        Label capacityLabel = new Label("Capacity: " + stackCapacity);
-        capacityLabel.getStyleClass().add("capacity-label");
-        stackVisualization.getChildren().add(capacityLabel);
+        // Add capacity indicator with progress bar
+        VBox capacitySection = new VBox(5);
+        capacitySection.setAlignment(Pos.CENTER);
+
+        int currentSize = stack.size();
+        double fillPercentage = (double) currentSize / stackCapacity;
+
+        capacityDisplayLabel = new Label("Capacity: " + stackCapacity + " | Used: " + currentSize);
+        capacityDisplayLabel.getStyleClass().add("capacity-display-label");
+
+        capacityProgressBar = new ProgressBar(fillPercentage);
+        capacityProgressBar.setPrefWidth(250);
+        capacityProgressBar.setPrefHeight(20);
+
+        // Set progress bar color based on fill percentage
+        if (fillPercentage < 0.7) {
+            capacityProgressBar.setStyle("-fx-accent: #66BB6A;"); // Green
+        } else if (fillPercentage < 0.9) {
+            capacityProgressBar.setStyle("-fx-accent: #FDD835;"); // Yellow
+        } else {
+            capacityProgressBar.setStyle("-fx-accent: #EF5350;"); // Red
+        }
+
+        capacitySection.getChildren().addAll(capacityDisplayLabel, capacityProgressBar);
+        stackVisualization.getChildren().add(capacitySection);
 
         // Get current stack elements
         int[] elements = stack.getElements();
-        int currentSize = stack.size();
 
         // Display stack elements (from top to bottom visually)
         for (int i = elements.length - 1; i >= 0; i--) {
+            HBox rowBox = new HBox(10);
+            rowBox.setAlignment(Pos.CENTER);
+
+            // Add index label on the left
+            Label indexLabel = new Label("[" + i + "]");
+            indexLabel.getStyleClass().add("index-label");
+            indexLabel.setPrefWidth(40);
+
+            // Create element box
             HBox elementBox = new HBox();
             elementBox.setAlignment(Pos.CENTER);
-            elementBox.setPadding(new Insets(10));
-            elementBox.setPrefHeight(50);
+            elementBox.setPadding(new Insets(15));
+            elementBox.setPrefHeight(60);
             elementBox.setPrefWidth(200);
 
             // Apply CSS class based on value (positive, negative, or zero)
@@ -352,31 +536,50 @@ public class App extends Application {
 
             elementBox.getChildren().add(valueLabel);
 
-            // Add TOP indicator for topmost element
+            // Add TOP indicator for topmost element on the right
+            Label topIndicator = new Label("");
+            topIndicator.setPrefWidth(60);
             if (i == elements.length - 1) {
-                Label topIndicator = new Label(" ← TOP");
+                topIndicator.setText("← TOP");
                 topIndicator.getStyleClass().add("top-indicator");
-                elementBox.getChildren().add(topIndicator);
             }
 
-            stackVisualization.getChildren().add(elementBox);
+            rowBox.getChildren().addAll(indexLabel, elementBox, topIndicator);
+            stackVisualization.getChildren().add(rowBox);
         }
 
         // Add empty slots visualization
         int emptySlots = stackCapacity - currentSize;
         for (int i = 0; i < emptySlots; i++) {
-            HBox emptyBox = new HBox();
+            HBox rowBox = new HBox(10);
+            rowBox.setAlignment(Pos.CENTER);
+
+            // Empty index label
+            Label emptyIndexLabel = new Label("");
+            emptyIndexLabel.setPrefWidth(40);
+
+            // Create empty slot box
+            VBox emptyBox = new VBox(2);
             emptyBox.setAlignment(Pos.CENTER);
-            emptyBox.setPadding(new Insets(10));
-            emptyBox.setPrefHeight(50);
+            emptyBox.setPadding(new Insets(15));
+            emptyBox.setPrefHeight(60);
             emptyBox.setPrefWidth(200);
             emptyBox.getStyleClass().add("empty-slot");
 
             Label emptyLabel = new Label("---");
             emptyLabel.getStyleClass().add("empty-slot-label");
 
-            emptyBox.getChildren().add(emptyLabel);
-            stackVisualization.getChildren().add(emptyBox);
+            Label emptyTextLabel = new Label("(empty)");
+            emptyTextLabel.getStyleClass().add("empty-text-label");
+
+            emptyBox.getChildren().addAll(emptyLabel, emptyTextLabel);
+
+            // Empty space on right
+            Label emptySpace = new Label("");
+            emptySpace.setPrefWidth(60);
+
+            rowBox.getChildren().addAll(emptyIndexLabel, emptyBox, emptySpace);
+            stackVisualization.getChildren().add(rowBox);
         }
     }
 
