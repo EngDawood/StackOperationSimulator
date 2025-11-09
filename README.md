@@ -377,13 +377,13 @@ Add Javadoc comments to all methods in StackDemo class:
 - [x] Alert dialogs for errors
 
 ### Styling
-- [ ] Button styling with colors
-- [ ] Hover effects on buttons
-- [ ] Stack element background colors
-- [ ] Border styling for elements
-- [ ] Status label color coding
-- [ ] Layout spacing and padding
-- [ ] Font styling throughout
+- [x] Button styling with colors
+- [x] Hover effects on buttons
+- [x] Stack element background colors
+- [x] Border styling for elements
+- [x] Status label color coding
+- [x] Layout spacing and padding
+- [x] Font styling throughout
 
 ### Testing
 - [ ] Push operations tested
