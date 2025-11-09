@@ -185,6 +185,15 @@ public class StackDemo {
     }
 
     /**
+     * Returns the maximum capacity of the stack.
+     *
+     * @return the maximum number of elements the stack can hold
+     */
+    public int getCapacity() {
+        return capacity;
+    }
+
+    /**
      * Returns a copy of all elements currently in the stack.
      *
      * <p>Creates a new array containing only the valid elements (from index 0 to top).
