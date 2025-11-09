@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -30,6 +32,11 @@ public class App extends Application {
     private TextField inputField;
     private VBox stackVisualization;
     private Label statusLabel;
+
+    // Buttons for dynamic enable/disable
+    private Button pushButton;
+    private Button popButton;
+    private Button peekButton;
 
     // Stack capacity
     private static final int STACK_CAPACITY = 12;
@@ -61,6 +68,7 @@ public class App extends Application {
 
         // Initial display update
         updateStackDisplay();
+        updateButtonStates();
 
         // Create and set scene
         Scene scene = new Scene(root, 800, 600);
@@ -87,15 +95,15 @@ public class App extends Application {
         inputField.setPrefWidth(120);
 
         // Create buttons
-        Button pushButton = new Button("Push");
+        pushButton = new Button("Push");
         pushButton.setPrefWidth(120);
         pushButton.setOnAction(e -> handlePush());
 
-        Button popButton = new Button("Pop");
+        popButton = new Button("Pop");
         popButton.setPrefWidth(120);
         popButton.setOnAction(e -> handlePop());
 
-        Button peekButton = new Button("Peek");
+        peekButton = new Button("Peek");
         peekButton.setPrefWidth(120);
         peekButton.setOnAction(e -> handlePeek());
 
@@ -161,8 +169,9 @@ public class App extends Application {
     private void handlePush() {
         String input = inputField.getText();
 
-        // Validate input is not empty
+        // Validate input is not empty or whitespace only
         if (input == null || input.trim().isEmpty()) {
+            showAlert(AlertType.WARNING, "Invalid Input", "Input field is empty. Please enter an integer value.");
             setStatusText("Invalid input. Enter integers only.", "red");
             return;
         }
@@ -178,10 +187,13 @@ public class App extends Application {
             setStatusText("Pushed: " + value, "green");
             inputField.clear();
             updateStackDisplay();
+            updateButtonStates();
 
         } catch (NumberFormatException e) {
+            showAlert(AlertType.WARNING, "Invalid Input", "Please enter a valid integer value.");
             setStatusText("Invalid input. Enter integers only.", "red");
         } catch (IllegalStateException e) {
+            showAlert(AlertType.ERROR, "Stack Overflow", e.getMessage());
             setStatusText(e.getMessage(), "red");
         }
     }
@@ -195,7 +207,9 @@ public class App extends Application {
             int value = stack.pop();
             setStatusText("Popped: " + value, "green");
             updateStackDisplay();
+            updateButtonStates();
         } catch (IllegalStateException e) {
+            showAlert(AlertType.ERROR, "Stack Underflow", e.getMessage());
             setStatusText(e.getMessage(), "red");
         }
     }
@@ -209,6 +223,7 @@ public class App extends Application {
             int value = stack.peek();
             setStatusText("Top element: " + value, "blue");
         } catch (IllegalStateException e) {
+            showAlert(AlertType.ERROR, "Stack Empty", e.getMessage());
             setStatusText(e.getMessage(), "red");
         }
     }
@@ -239,6 +254,7 @@ public class App extends Application {
         stack = new StackDemo(STACK_CAPACITY);
         setStatusText("Stack cleared", "orange");
         updateStackDisplay();
+        updateButtonStates();
     }
 
     /**
@@ -309,6 +325,36 @@ public class App extends Application {
             emptyBox.getChildren().add(emptyLabel);
             stackVisualization.getChildren().add(emptyBox);
         }
+    }
+
+    /**
+     * Updates button enabled/disabled states based on current stack state.
+     * Disables Push button when stack is full.
+     * Disables Pop and Peek buttons when stack is empty.
+     */
+    private void updateButtonStates() {
+        // Disable Push button when stack is full
+        pushButton.setDisable(stack.isFull());
+
+        // Disable Pop and Peek buttons when stack is empty
+        boolean isEmpty = stack.isEmpty();
+        popButton.setDisable(isEmpty);
+        peekButton.setDisable(isEmpty);
+    }
+
+    /**
+     * Shows an Alert dialog with specified type, title, and message.
+     *
+     * @param type the type of alert (ERROR, WARNING, INFORMATION)
+     * @param title the title of the alert dialog
+     * @param message the message content
+     */
+    private void showAlert(AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
