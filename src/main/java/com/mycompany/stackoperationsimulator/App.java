@@ -63,7 +63,7 @@ public class App extends Application {
     private int stackCapacity = 12;
 
     // Initial data for stack (optional)
-    private int[] initialData = null;
+    private double[] initialData = null;
 
     /**
      * Default constructor - initializes with default capacity of 12.
@@ -88,7 +88,7 @@ public class App extends Application {
 
         // Push initial data if provided
         if (initialData != null) {
-            for (int value : initialData) {
+            for (double value : initialData) {
                 try {
                     stack.push(value);
                 } catch (IllegalStateException e) {
@@ -167,7 +167,7 @@ public class App extends Application {
 
         // TextField for numeric input
         inputField = new TextField();
-        inputField.setPromptText("Enter integer");
+        inputField.setPromptText("Enter number");
         inputField.setPrefWidth(120);
 
         // Create buttons with CSS styling
@@ -386,14 +386,14 @@ public class App extends Application {
 
         // Validate input is not empty or whitespace only
         if (input == null || input.trim().isEmpty()) {
-            showAlert(AlertType.WARNING, "Invalid Input", "Input field is empty. Please enter an integer value.");
-            setStatusText("Invalid input. Enter integers only.", "red");
+            showAlert(AlertType.WARNING, "Invalid Input", "Input field is empty. Please enter a numeric value.");
+            setStatusText("Invalid input. Enter numbers only.", "red");
             return;
         }
 
         try {
-            // Parse input to integer
-            int value = Integer.parseInt(input.trim());
+            // Parse input to double
+            double value = Double.parseDouble(input.trim());
 
             // Push to stack
             stack.push(value);
@@ -416,8 +416,8 @@ public class App extends Application {
             pause.play();
 
         } catch (NumberFormatException e) {
-            showAlert(AlertType.WARNING, "Invalid Input", "Please enter a valid integer value.");
-            setStatusText("Invalid input. Enter integers only.", "red");
+            showAlert(AlertType.WARNING, "Invalid Input", "Please enter a valid numeric value.");
+            setStatusText("Invalid input. Enter numbers only.", "red");
         } catch (IllegalStateException e) {
             showAlert(AlertType.ERROR, "Stack Overflow", e.getMessage());
             setStatusText(e.getMessage(), "red");
@@ -430,7 +430,7 @@ public class App extends Application {
      */
     private void handlePop() {
         try {
-            int value = stack.pop();
+            double value = stack.pop();
             setStatusText("Popped: " + value, "green");
             lastOperationLabel.setText("Popped: " + value + " | Stack Size: " + stack.size());
             lastOperationLabel.getStyleClass().removeAll("status-success", "status-error", "status-info");
@@ -456,7 +456,7 @@ public class App extends Application {
      */
     private void handlePeek() {
         try {
-            int value = stack.peek();
+            double value = stack.peek();
             setStatusText("Top element: " + value, "blue");
             lastOperationLabel.setText("Peek: " + value + " | No change");
             lastOperationLabel.getStyleClass().removeAll("status-success", "status-error", "status-info");
@@ -542,7 +542,7 @@ public class App extends Application {
         stackVisualization.getChildren().add(capacitySection);
 
         // Get current stack elements
-        int[] elements = stack.getElements();
+        double[] elements = stack.getElements();
 
         // Display stack elements (from top to bottom visually)
         for (int i = elements.length - 1; i >= 0; i--) {
@@ -695,9 +695,9 @@ public class App extends Application {
      * Sets the initial data to be pushed to the stack.
      * Must be called before start() method.
      *
-     * @param data array of integers to push to the stack initially
+     * @param data array of doubles to push to the stack initially
      */
-    public void setInitialData(int[] data) {
+    public void setInitialData(double[] data) {
         this.initialData = data;
     }
 

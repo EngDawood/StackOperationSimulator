@@ -258,11 +258,11 @@ public class StackLauncher extends Application {
                 numberOfElements = stackSize;
             }
 
-            // Generate random integers between -99 and 99
+            // Generate random doubles between -99.99 and 99.99
             Random random = new Random();
-            int[] initialData = new int[numberOfElements];
+            double[] initialData = new double[numberOfElements];
             for (int i = 0; i < numberOfElements; i++) {
-                initialData[i] = random.nextInt(199) - 99; // Range: -99 to 99
+                initialData[i] = (random.nextDouble() * 199.98) - 99.99; // Range: -99.99 to 99.99
             }
 
             // Set initial data
