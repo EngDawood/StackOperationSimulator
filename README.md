@@ -347,32 +347,32 @@ Add Javadoc comments to all methods in StackDemo class:
 - [x] getElements() method for visualization
 
 ### JavaFX Application
-- [ ] Main application class extending Application
-- [ ] BorderPane layout configured
-- [ ] Input TextField added
-- [ ] Push button with event handler
-- [ ] Pop button with event handler
-- [ ] Peek button with event handler
-- [ ] Size button with event handler
-- [ ] IsEmpty button with event handler
-- [ ] Clear button with event handler
-- [ ] Status label for messages
+- [x] Main application class extending Application
+- [x] BorderPane layout configured
+- [x] Input TextField added
+- [x] Push button with event handler
+- [x] Pop button with event handler
+- [x] Peek button with event handler
+- [x] Size button with event handler
+- [x] IsEmpty button with event handler
+- [x] Clear button with event handler
+- [x] Status label for messages
 
 ### Visualization
-- [ ] VBox for stack element display
-- [ ] Method to update visual display
-- [ ] Stack elements shown as styled components
-- [ ] Empty slots visualization
-- [ ] Top pointer indicator
-- [ ] Capacity indicator display
-- [ ] Visual updates after each operation
+- [x] VBox for stack element display
+- [x] Method to update visual display
+- [x] Stack elements shown as styled components
+- [x] Empty slots visualization
+- [x] Top pointer indicator
+- [x] Capacity indicator display
+- [x] Visual updates after each operation
 
 ### Error Handling
-- [ ] Input validation for numeric values
-- [ ] NumberFormatException handling
-- [ ] Overflow exception handling
-- [ ] Underflow exception handling
-- [ ] Empty input validation
+- [x] Input validation for numeric values
+- [x] NumberFormatException handling
+- [x] Overflow exception handling
+- [x] Underflow exception handling
+- [x] Empty input validation
 - [ ] Button disable/enable logic
 - [ ] Alert dialogs for errors
 
