@@ -386,15 +386,15 @@ Add Javadoc comments to all methods in StackDemo class:
 - [x] Font styling throughout
 
 ### Testing
-- [ ] Push operations tested
-- [ ] Pop operations tested
-- [ ] Peek operations tested
-- [ ] Size and isEmpty tested
-- [ ] Overflow scenario tested
-- [ ] Underflow scenario tested
-- [ ] Invalid input tested
-- [ ] Clear operation tested
-- [ ] LIFO order verified
+- [x] Push operations tested
+- [x] Pop operations tested
+- [x] Peek operations tested
+- [x] Size and isEmpty tested
+- [x] Overflow scenario tested
+- [x] Underflow scenario tested
+- [x] Invalid input tested
+- [x] Clear operation tested
+- [x] LIFO order verified
 
 ### Documentation
 - [x] Javadoc comments added
