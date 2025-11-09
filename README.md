@@ -373,8 +373,8 @@ Add Javadoc comments to all methods in StackDemo class:
 - [x] Overflow exception handling
 - [x] Underflow exception handling
 - [x] Empty input validation
-- [ ] Button disable/enable logic
-- [ ] Alert dialogs for errors
+- [x] Button disable/enable logic
+- [x] Alert dialogs for errors
 
 ### Styling
 - [ ] Button styling with colors
